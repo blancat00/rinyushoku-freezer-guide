@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>離乳食 カット冷凍ストック</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #F0F5F0;
+  --surface: #FFFFFF;
+  --border:  #D4E4D4;
+  --deep:    #1A3020;
+  --mid:     #4A6B50;
+  --soft:    #7A9B80;
+  --ok:      #2D7A45;
+  --ok-bg:   #E6F4EB;
+  --warn:    #8B5E00;
+  --warn-bg: #FEF4E0;
+  --ng:      #8B2020;
+  --ng-bg:   #FDEAEA;
+  --cond:    #4A4A8B;
+  --cond-bg: #EEEEFF;
+  --veg:     #3A7A3A;
+  --fruit:   #C06020;
+  --fish:    #20607A;
+  --r: 14px;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--deep);
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--deep);
+  padding: 24px 20px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.header-grid {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 4px; padding: 4px;
+  opacity: .06; pointer-events: none;
+}
+.header-grid span {
+  background: #fff;
+  border-radius: 6px;
+}
+header h1 {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.1rem, 5vw, 1.5rem);
+  color: #fff;
+  position: relative;
+  letter-spacing: .03em;
+  line-height: 1.3;
+}
+header p {
+  font-size: .78rem;
+  color: rgba(255,255,255,.72);
+  position: relative;
+  margin-top: 5px;
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.leg {
+  display: flex; align-items: center; gap: 5px;
+  font-size: .72rem; font-weight: 700;
+}
+.dot {
+  width: 10px; height: 10px; border-radius: 3px;
+}
+.dot-ok   { background: var(--ok); }
+.dot-cond { background: var(--cond); }
+.dot-ng   { background: var(--ng); }
+
+/* ── CONTROLS ── */
+.controls {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--bg);
+  padding: 10px 16px 11px;
+  border-bottom: 1px solid var(--border);
+}
+.search-wrap {
+  position: relative;
+}
+.search-icon {
+  position: absolute; left: 13px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--soft); pointer-events: none;
+  font-size: 1rem;
+}
+input[type="search"] {
+  width: 100%;
+  font-family: inherit; font-size: .9rem;
+  padding: 10px 16px 10px 36px;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--deep);
+  outline: none;
+  -webkit-appearance: none;
+}
+input[type="search"]:focus { border-color: var(--mid); }
+
+.filters {
+  display: flex; gap: 7px; flex-wrap: wrap;
+  margin-top: 9px;
+}
+.chip {
+  font-family: inherit; font-size: .75rem; font-weight: 700;
+  padding: 5px 13px;
+  border-radius: 999px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--mid);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.chip.on { background: var(--deep); border-color: var(--deep); color: #fff; }
+.chip:focus-visible { outline: 3px solid var(--mid); outline-offset: 2px; }
+
+/* ── MAIN ── */
+main {
+  padding: 14px 16px 60px;
+  max-width: 640px;
+  margin: 0 auto;
+  display: grid;
+  gap: 10px;
+}
+.count-bar {
+  font-size: .72rem;
+  color: var(--soft);
+  padding: 2px 0;
+}
+
+/* ── CARD ── */
+details.card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+details.card[data-status="ok"]   { border-left: 5px solid var(--ok); }
+details.card[data-status="cond"] { border-left: 5px solid var(--cond); }
+details.card[data-status="ng"]   { border-left: 5px solid var(--ng); }
+
+details.card summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  user-select: none;
+}
+details.card summary::-webkit-details-marker { display: none; }
+details.card summary:focus-visible {
+  outline: 3px solid var(--mid);
+  outline-offset: -3px;
+  border-radius: var(--r);
+}
+
+.emoji {
+  font-size: 1.4rem;
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.emoji-ok   { background: var(--ok-bg); }
+.emoji-cond { background: var(--cond-bg); }
+.emoji-ng   { background: var(--ng-bg); }
+
+.sum-text { flex: 1; min-width: 0; }
+.food-name {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+.food-sub {
+  font-size: .68rem;
+  color: var(--soft);
+  margin-top: 2px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sum-badges {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+  flex-shrink: 0;
+}
+.badge-cat {
+  font-size: .62rem; font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: #fff;
+}
+.badge-cat.veg   { background: var(--veg); }
+.badge-cat.fruit { background: var(--fruit); }
+.badge-cat.fish  { background: var(--fish); }
+
+.badge-period {
+  font-size: .68rem; font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--deep);
+  white-space: nowrap;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--soft);
+  transition: transform .2s;
+}
+details[open] .chevron { transform: rotate(90deg); }
+
+/* ── CARD BODY ── */
+.card-body {
+  padding: 0 14px 14px;
+  border-top: 1px dashed var(--border);
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bg);
+  font-size: .84rem;
+}
+.info-row:last-child { border-bottom: none; }
+
+.info-label {
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  color: var(--soft);
+  white-space: nowrap;
+  padding-top: 2px;
+  min-width: 60px;
+}
+
+.info-val { flex: 1; }
+.info-val ol { padding-left: 18px; display: grid; gap: 3px; }
+.info-val li { line-height: 1.55; }
+
+/* status banners */
+.status-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: .8rem;
+  font-weight: 700;
+  margin: 10px 0 2px;
+}
+.status-banner.ok   { background: var(--ok-bg);   color: var(--ok);   }
+.status-banner.cond { background: var(--cond-bg); color: var(--cond); }
+.status-banner.ng   { background: var(--ng-bg);   color: var(--ng);   }
+
+.note-box {
+  margin-top: 10px;
+  background: var(--warn-bg);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-size: .79rem;
+  color: var(--warn);
+  line-height: 1.55;
+}
+.note-box strong {
+  display: block;
+  font-size: .68rem;
+  letter-spacing: .06em;
+  margin-bottom: 2px;
+}
+
+/* ── EMPTY ── */
+#empty {
+  display: none;
+  text-align: center;
+  padding: 40px 0;
+  color: var(--soft);
+  font-size: .9rem;
+}
+
+/* ── COMMON TIPS ── */
+.tips {
+  margin: 0 16px 4px;
+  max-width: 640px;
+  margin-left: auto; margin-right: auto;
+}
+.tips-inner {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+}
+.tips-title {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: .9rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 7px;
+}
+.tips-list {
+  list-style: none;
+  display: grid; gap: 7px;
+}
+.tips-list li {
+  font-size: .82rem;
+  padding-left: 22px;
+  position: relative;
+  line-height: 1.55;
+}
+.tips-list li::before {
+  content: "▸";
+  position: absolute; left: 0;
+  color: var(--mid);
+}
+
+footer {
+  text-align: center;
+  font-size: .68rem;
+  color: var(--soft);
+  padding: 20px 16px 0;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-grid" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <h1>🥕 離乳食 カット冷凍ストックガイド</h1>
+  <p>生のままカットして冷凍 → 使う分だけ調理するフロー｜生後5ヶ月〜</p>
+</header>
+
+<div class="legend">
+  <div class="leg"><div class="dot dot-ok"></div>生カット冷凍OK</div>
+  <div class="leg"><div class="dot dot-cond"></div>条件付きOK・要注意</div>
+  <div class="leg"><div class="dot dot-ng"></div>生カット冷凍は非推奨</div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="search" id="q" placeholder="食材名で検索…" aria-label="食材を検索">
+  </div>
+  <div class="filters" role="group" aria-label="絞り込み">
+    <button class="chip on" data-f="all">すべて</button>
+    <button class="chip" data-f="veg">🥬 野菜</button>
+    <button class="chip" data-f="fruit">🍎 果物</button>
+    <button class="chip" data-f="fish">🐟 魚</button>
+    <button class="chip" data-f="ok">✅ OK</button>
+    <button class="chip" data-f="cond">⚠️ 要注意</button>
+    <button class="chip" data-f="ng">❌ 非推奨</button>
+  </div>
+</div>
+
+<div class="tips" style="padding-top:14px">
+  <div class="tips-inner">
+    <div class="tips-title">🧊 冷凍の共通ルール</div>
+    <ul class="tips-list">
+      <li>水気をしっかり拭いてから冷凍用保存袋へ。空気を抜いて密封する。</li>
+      <li>金属トレー（アルミバットなど）にのせると急速冷凍でき、品質が保たれる。</li>
+      <li>平らに広げて冷凍すると、使いたい分だけ折って取り出せて便利。</li>
+      <li>袋に食材名・冷凍日を書いておくと管理しやすい。</li>
+      <li><b>調理するときは凍ったまま加熱が基本。自然解凍は水分が出てNG。</b></li>
+      <li>解凍・加熱したものの再冷凍はしない。</li>
+    </ul>
+  </div>
+</div>
+
+<main id="list"></main>
+<p id="empty">該当する食材が見つかりません</p>
+
+<footer>
+  出典：カゴメVEGEDAY・ニチレイフーズ・旭化成・Panasonic・キューピーほか各社の保存情報をもとに作成。<br>
+  保存期間はあくまで目安です。においや色・食感がおかしいと感じたら廃棄してください。
+</footer>
+
+<script>
+const FOODS = [
+  // ─── 野菜 ───
+  {
+    n: "にんじん", e: "🥕", c: "veg", status: "ok",
+    period: "約1ヶ月",
+    sub: "生カット冷凍OK",
+    cut: "いちょう切り・細切り・乱切りなど使いやすいサイズ",
+    how: [
+      "よく洗って皮をむき、使いやすい大きさに切る",
+      "水気をキッチンペーパーでしっかり拭き取る",
+      "冷凍用保存袋に平らに広げて空気を抜き、金属トレーにのせて冷凍"
+    ],
+    cook: "凍ったまま鍋・スープ・蒸しに使用。火の通りが早いので時短になる",
+    note: null
+  },
+  {
+    n: "ほうれん草", e: "🥬", c: "veg", status: "ok",
+    period: "生のまま約1ヶ月（茹でてからも可）",
+    sub: "生カット冷凍OK｜茹でてからでも可",
+    cut: "葉先のみを3〜4cm幅に切る（茎は固いので離乳食には使わない）",
+    how: [
+      "葉先だけを使い、3〜4cm幅に切る",
+      "水気をしっかり拭き取る",
+      "冷凍用保存袋に入れて空気を抜いて冷凍"
+    ],
+    cook: "凍ったままスープや煮込みに加える。アクが出るので加熱後に水にさらしてからペーストに",
+    note: "茹でてから冷凍（固茹で→水絞り→冷凍）にすると保存期間が安定し、調理時もアク抜きが不要になる。どちらでも離乳食用途では問題なし。"
+  },
+  {
+    n: "かぼちゃ", e: "🎃", c: "veg", status: "ok",
+    period: "約1ヶ月",
+    sub: "生カット冷凍OK",
+    cut: "種・ワタを除いてひと口大または薄切り（皮は調理時に除く）",
+    how: [
+      "種・ワタを取り除き、ひと口大か薄切りに切る",
+      "水気を拭き取り、冷凍用保存袋に平らに入れて空気を抜く",
+      "金属トレーにのせて冷凍"
+    ],
+    cook: "凍ったままレンジ加熱または茹でてやわらかくし、調理時にペースト・裏ごしへ",
+    note: null
+  },
+  {
+    n: "トマト", e: "🍅", c: "veg", status: "ok",
+    period: "約1〜2ヶ月",
+    sub: "生カット冷凍OK｜加熱調理専用になる",
+    cut: "ヘタを取ってざく切り、または丸ごと",
+    how: [
+      "ヘタを取り、ざく切りにする（または丸ごとラップして冷凍も可）",
+      "冷凍用保存袋に平らに広げ空気を抜いて冷凍"
+    ],
+    cook: "凍ったままスープや煮込みに加えてOK。半解凍で水に浸けると皮がつるりとむける",
+    note: "⚠️ 解凍すると水分が出てやわらかくなるため、生食には不向き。離乳食用途（加熱してペースト）には全く問題なし。"
+  },
+  {
+    n: "ブロッコリー", e: "🥦", c: "veg", status: "ok",
+    period: "約1ヶ月",
+    sub: "生カット冷凍OK｜茹でてからも可",
+    cut: "穂先を小分けに切り分ける（茎は離乳食初期には使わない）",
+    how: [
+      "穂先だけを小分けに切り分ける",
+      "水気をしっかり拭き取る",
+      "冷凍用保存袋に平らに並べて空気を抜き冷凍"
+    ],
+    cook: "凍ったままスープや蒸し調理へ。茹でてからペーストに仕上げる",
+    note: "固茹でしてから冷凍にすると調理時短になる。どちらの方法でもOK。"
+  },
+  {
+    n: "きゃべつ", e: "🥗", c: "veg", status: "ok",
+    period: "約1ヶ月",
+    sub: "生カット冷凍OK",
+    cut: "ひと口大にちぎる、またはざく切り",
+    how: [
+      "芯を除いてひと口大またはざく切りにする",
+      "水気を拭き取り、冷凍用保存袋に入れて空気を抜いて冷凍"
+    ],
+    cook: "凍ったままスープや煮込みへ。やわらかく煮てからペーストに",
+    note: null
+  },
+  {
+    n: "たまねぎ", e: "🧅", c: "veg", status: "ok",
+    period: "約1ヶ月",
+    sub: "生カット冷凍OK｜辛みが和らぐ",
+    cut: "みじん切り、または薄切り・くし切り",
+    how: [
+      "皮をむいて芯を除き、みじん切りか薄切りに",
+      "水気を拭き取り、冷凍用保存袋に平らに入れて空気を抜いて冷凍"
+    ],
+    cook: "凍ったまま炒め物・スープへ。冷凍すると辛みが和らぎ甘みが出る",
+    note: null
+  },
+  {
+    n: "さつまいも", e: "🍠", c: "veg", status: "ok",
+    period: "約1ヶ月",
+    sub: "生カット冷凍OK｜アク抜き必須",
+    cut: "輪切り・いちょう切り・スティック状（離乳食はいちょう切りが使いやすい）",
+    how: [
+      "皮をむいて使いやすい形に切る",
+      "5分ほど水にさらしてアク抜きをする",
+      "水気をキッチンペーパーでしっかり拭き取る",
+      "冷凍用保存袋に入れて空気を抜き冷凍"
+    ],
+    cook: "凍ったままレンジ加熱または茹でてやわらかくしてからペーストに",
+    note: "⚠️ 自然解凍するとパサパサになるので必ず凍ったまま加熱すること。"
+  },
+  {
+    n: "大根", e: "⬜", c: "veg", status: "ok",
+    period: "約3〜4週間",
+    sub: "生カット冷凍OK｜すりおろし冷凍も可",
+    cut: "いちょう切り・短冊切り・輪切りなど、またはすりおろし",
+    how: [
+      "皮を厚めにむき（先端は辛みが強いので上〜中央部を使用）、使いやすい大きさに切る",
+      "水気をキッチンペーパーで拭き取る",
+      "冷凍用保存袋に平らに入れて空気を抜き、金属トレーで急速冷凍",
+      "【すりおろし冷凍の場合】すりおろして軽く水気を切り、小分けにラップで包んで冷凍"
+    ],
+    cook: "カットしたものは凍ったままスープや煮込みへ（味が染みやすくなる）。すりおろしは自然解凍または軽くレンジ加熱して使用",
+    note: null
+  },
+  {
+    n: "かぶ", e: "🤍", c: "veg", status: "ok",
+    period: "約1ヶ月",
+    sub: "生カット冷凍OK｜葉も冷凍可",
+    cut: "身：くし切り・輪切り・すりおろし / 葉：3〜4cm幅",
+    how: [
+      "身は皮を厚めにむき（内側の繊維層があるため）、食べやすい大きさに切る",
+      "葉は葉先を3〜4cm幅に切る",
+      "それぞれ水気を拭いて冷凍用保存袋に入れ、空気を抜いて冷凍"
+    ],
+    cook: "凍ったままスープや煮込みへ。身は煮てからペーストに",
+    note: null
+  },
+  {
+    n: "白菜", e: "🥬", c: "veg", status: "ok",
+    period: "約1ヶ月",
+    sub: "生カット冷凍OK｜塩もみなしで",
+    cut: "葉先のやわらかい部分をざく切り",
+    how: [
+      "葉先のやわらかい部分を使い、ざく切りに",
+      "水気をしっかり拭き取る（水気が残ると細胞が壊れやすい）",
+      "冷凍用保存袋に平らに入れて空気を抜き冷凍"
+    ],
+    cook: "凍ったままスープや煮込みへ。やわらかく煮てからペーストに",
+    note: "⚠️ 一般的な「塩もみ冷凍」は塩分がつくため離乳食には不向き。塩なしのまま冷凍してOK。シャキシャキ感は失われるが離乳食用の加熱調理には問題なし。"
+  },
+  {
+    n: "小松菜", e: "🌿", c: "veg", status: "ok",
+    period: "生のまま約2〜3週間 / 茹でてから約1ヶ月",
+    sub: "生カット冷凍OK｜茹でてからのほうが長持ち",
+    cut: "葉先のみを3〜5cm幅（茎は離乳食初期には使わない）",
+    how: [
+      "葉先だけを使い、3〜5cm幅に切る",
+      "水気をしっかり拭き取る",
+      "冷凍用保存袋に入れて空気を抜き冷凍"
+    ],
+    cook: "凍ったままスープや煮込みへ。加熱後にペーストに仕上げる",
+    note: "茹でてから冷凍（サッと茹でて水気を絞ってから冷凍）にすると保存期間が約1ヶ月になり品質も安定する。"
+  },
+  {
+    n: "とうもろこし", e: "🌽", c: "veg", status: "ok",
+    period: "生のまま約2ヶ月 / 茹でてから約1ヶ月",
+    sub: "生カット冷凍OK｜粒外しが便利",
+    cut: "粒を包丁で外す、または輪切り・丸ごと",
+    how: [
+      "皮とひげを取り除く",
+      "包丁で芯から粒を外す（離乳食用には粒だけが使いやすい）",
+      "冷凍用保存袋に平らに広げて空気を抜いて冷凍"
+    ],
+    cook: "凍ったままスープや茹で調理へ。加熱後に裏ごし（薄皮を必ず除く）してペーストに",
+    note: "⚠️ 離乳食に使うときは必ず裏ごしして薄皮を取り除くこと（初期は消化しにくい）。"
+  },
+
+  // ─── 果物 ───
+  {
+    n: "りんご", e: "🍎", c: "fruit", status: "cond",
+    period: "約1ヶ月",
+    sub: "条件付きOK｜変色防止処理あり",
+    cut: "8等分のくし切り、皮ごとまたは皮なし",
+    how: [
+      "よく洗い、芯と種を除いてくし切りや薄切りに",
+      "変色防止のため砂糖水（水100mlに砂糖小さじ1）に5分浸す",
+      "水気をキッチンペーパーで拭き取る",
+      "ラップで小分けに包んで冷凍用保存袋へ、空気を抜いて冷凍"
+    ],
+    cook: "凍ったままレンジ加熱または蒸してやわらかくし、ペーストに",
+    note: "⚠️ 冷凍するとシャキシャキ感が失われ食感がシャリシャリに変わる。生食には不向きになるが、加熱してペーストにする離乳食用途ではむしろ使いやすい。レモン汁での変色防止も可能だが離乳食初期は刺激になる場合があるため砂糖水推奨。"
+  },
+  {
+    n: "みかん", e: "🍊", c: "fruit", status: "cond",
+    period: "約1〜2ヶ月",
+    sub: "条件付きOK｜薄皮まで除いてから",
+    cut: "外皮と白い筋・薄皮をすべて除いた果肉を房単位で",
+    how: [
+      "外皮をむき、白い筋と薄皮も丁寧に取り除く",
+      "房ごとにラップに包むか、トレーに並べて1〜2時間仮冷凍",
+      "くっつかなくなったら冷凍用保存袋に移し空気を抜いて冷凍"
+    ],
+    cook: "凍ったまま軽くレンジ加熱してペーストに、または自然解凍（半解凍状態）で果汁を搾って白湯で薄めて与える",
+    note: "⚠️ 解凍後は水分が出てやわらかくなるため生食には不向き。離乳食初期は果汁を白湯で薄めて与えること。酸味が強いので与えすぎ注意・下痢のときは控える。"
+  },
+
+  // ─── 魚 ───
+  {
+    n: "白身魚（鯛・ヒラメ・カレイ）", e: "🐟", c: "fish", status: "ng",
+    period: "冷凍するなら約2〜3週間（推奨しない）",
+    sub: "生カット冷凍は非推奨｜都度購入が安心",
+    cut: "切り身のまま、または小分けにカット",
+    how: [
+      "【やむを得ず冷凍する場合】切り身のドリップ（水分）をキッチンペーパーでしっかり拭き取る",
+      "1切れずつラップでぴったり包み、空気に触れないようにする",
+      "冷凍用保存袋に入れて空気を抜き、金属トレーで急速冷凍"
+    ],
+    cook: "冷蔵庫で低温解凍（流水解凍でも可）してから加熱調理。凍ったまま蒸し・茹でも可",
+    note: "❌ 家庭用冷凍庫では業務用と違い急速冷凍できないため、解凍時にうま味と水分（ドリップ）が流出し品質が落ちやすい。また赤ちゃんに与える魚は鮮度が特に重要。スーパーで新鮮なものを都度少量購入するのが最も安心。刺身用（鯛など）を当日購入してすぐ調理するのがベスト。"
+  },
+  {
+    n: "しらす", e: "🐠", c: "fish", status: "ng",
+    period: "釜揚げ・しらす干しなら冷凍約1ヶ月",
+    sub: "生しらすは冷凍NG｜釜揚げ・干しはOK",
+    cut: "小分けに（1回使用量ずつ）",
+    how: [
+      "【釜揚げしらすまたはしらす干しの場合】1回分ずつラップで小分けに包む",
+      "冷凍用保存袋に入れて平らにし、空気を抜いて冷凍。購入当日に冷凍するのがベスト",
+      "【生しらすは冷凍しない】傷みが非常に早いため当日中に調理すること"
+    ],
+    cook: "冷蔵庫で半日ほどかけて解凍（または流水解凍）。解凍後は必ず熱湯をかけて塩抜きしてから離乳食に使用",
+    note: "❌ 生しらすは鮮度が落ちやすく冷凍保存には向かない。購入するなら釜揚げしらすかしらす干しを選ぶ。冷凍しても離乳食に使うときは必ず塩抜き（熱湯をかける）が必要。"
+  },
+
+  // ─── 条件付き ───
+  {
+    n: "じゃがいも", e: "🥔", c: "veg", status: "cond",
+    period: "加熱後マッシュで約1ヶ月（生カット冷凍は非推奨）",
+    sub: "生カット冷凍は非推奨｜加熱後マッシュ冷凍が安心",
+    cut: "加熱後につぶしてマッシュ状にしてから冷凍",
+    how: [
+      "【生カット冷凍は基本NG】水分が約8割で、解凍時に水分が抜けてスカスカになる",
+      "【推奨】茹でるor電子レンジで加熱し、熱いうちに完全につぶしてマッシュ状にする",
+      "完全に冷ましてから小分けにラップで包み、冷凍用保存袋に入れて冷凍",
+      "【やむを得ず生カットする場合】凍ったまま直接スープに入れる使い方のみ許容範囲"
+    ],
+    cook: "レンジで加熱するか、凍ったままスープ・煮込みに投入",
+    note: "⚠️ 生のまま冷凍すると解凍後に水分が抜けてスカスカ・パサパサになる。離乳食用には加熱してマッシュにしてから冷凍するのが正解。"
+  }
+];
+
+const catName = { veg: "野菜", fruit: "果物", fish: "魚" };
+const statusLabel = { ok: "✅ 生カット冷凍OK", cond: "⚠️ 条件付きOK", ng: "❌ 生カット非推奨" };
+
+const list = document.getElementById('list');
+const qEl = document.getElementById('q');
+const emptyEl = document.getElementById('empty');
+let catFilter = "all";
+
+function render() {
+  const kw = qEl.value.trim();
+  list.innerHTML = "";
+  let shown = 0;
+
+  FOODS.forEach(f => {
+    const catMatch = catFilter === "all"
+      || catFilter === f.c
+      || catFilter === f.status;
+    if (!catMatch) return;
+    if (kw && !f.n.includes(kw)) return;
+    shown++;
+
+    const d = document.createElement('details');
+    d.className = "card";
+    d.dataset.status = f.status;
+
+    const stepItems = f.how.map(s => `<li>${s}</li>`).join("");
+
+    d.innerHTML = `
+      <summary>
+        <span class="emoji emoji-${f.status}" aria-hidden="true">${f.e}</span>
+        <span class="sum-text">
+          <span class="food-name">${f.n}</span>
+          <span class="food-sub">${f.sub}</span>
+        </span>
+        <span class="sum-badges">
+          <span class="badge-cat ${f.c}">${catName[f.c]}</span>
+          <span class="badge-period">❄ ${f.period}</span>
+        </span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </summary>
+      <div class="card-body">
+        <div class="status-banner ${f.status}">${statusLabel[f.status]}</div>
+
+        <div class="info-row">
+          <span class="info-label">カット方法</span>
+          <span class="info-val">${f.cut}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">冷凍手順</span>
+          <span class="info-val"><ol>${stepItems}</ol></span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">使うとき</span>
+          <span class="info-val">${f.cook}</span>
+        </div>
+        ${f.note ? `<div class="note-box"><strong>ポイント・注意</strong>${f.note}</div>` : ""}
+      </div>
+    `;
+    list.appendChild(d);
+  });
+
+  const bar = document.createElement('p');
+  bar.className = "count-bar";
+  bar.textContent = `${shown} / ${FOODS.length} 食材`;
+  list.prepend(bar);
+
+  emptyEl.style.display = shown ? "none" : "block";
+}
+
+qEl.addEventListener('input', render);
+document.querySelectorAll('.chip').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    catFilter = b.dataset.f;
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
