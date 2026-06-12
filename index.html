@@ -160,13 +160,11 @@ main {
   padding: 10px 10px 60px;
   max-width: 640px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  align-items: start;
+  column-count: 2;
+  column-gap: 8px;
 }
 .count-bar {
-  grid-column: 1 / -1;
+  column-span: all;
   font-size: .7rem;
   color: var(--soft);
   padding: 2px 2px;
@@ -178,7 +176,11 @@ details.card {
   border: 2px solid var(--border);
   border-radius: var(--r);
   overflow: hidden;
-  transition: grid-column .0s;
+  break-inside: avoid;
+  margin-bottom: 8px;
+}
+details.card.is-open {
+  column-span: all;
 }
 details.card[data-status="ok"]   { border-left: 4px solid var(--ok); }
 details.card[data-status="cond"] { border-left: 4px solid var(--cond); }
@@ -344,7 +346,7 @@ details[open] .chevron { transform: rotate(90deg); }
 /* ── EMPTY ── */
 #empty {
   display: none;
-  grid-column: 1 / -1;
+  column-span: all;
   text-align: center;
   padding: 40px 0;
   color: var(--soft);
@@ -778,7 +780,7 @@ function render() {
 
     // 開いたとき2列にまたがる
     d.addEventListener('toggle', () => {
-      d.style.gridColumn = d.open ? 'span 2' : '';
+      d.classList.toggle('is-open', d.open);
     });
 
     const stepItems = f.how.map(s => `<li>${s}</li>`).join("");
@@ -821,7 +823,6 @@ function render() {
 
   const bar = document.createElement('p');
   bar.className = "count-bar";
-  bar.style.gridColumn = '1 / -1';
   bar.textContent = `${shown} / ${FOODS.length} 食材`;
   list.prepend(bar);
 
