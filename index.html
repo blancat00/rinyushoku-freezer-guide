@@ -35,6 +35,7 @@ body {
   color: var(--deep);
   line-height: 1.65;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* ── HEADER ── */
@@ -52,42 +53,28 @@ header {
   gap: 4px; padding: 4px;
   opacity: .06; pointer-events: none;
 }
-.header-grid span {
-  background: #fff;
-  border-radius: 6px;
-}
+.header-grid span { background: #fff; border-radius: 6px; }
 header h1 {
   font-family: 'Zen Kaku Gothic New', sans-serif;
   font-weight: 900;
   font-size: clamp(1rem, 5vw, 1.4rem);
-  color: #fff;
-  position: relative;
-  letter-spacing: .03em;
-  line-height: 1.3;
+  color: #fff; position: relative;
+  letter-spacing: .03em; line-height: 1.3;
 }
 header p {
-  font-size: .75rem;
-  color: rgba(255,255,255,.72);
-  position: relative;
-  margin-top: 4px;
+  font-size: .75rem; color: rgba(255,255,255,.72);
+  position: relative; margin-top: 4px;
 }
 
 /* ── LEGEND ── */
 .legend {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  display: flex; gap: 8px; flex-wrap: wrap;
   padding: 10px 14px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
-.leg {
-  display: flex; align-items: center; gap: 5px;
-  font-size: .7rem; font-weight: 700;
-}
-.dot {
-  width: 9px; height: 9px; border-radius: 3px;
-}
+.leg { display: flex; align-items: center; gap: 5px; font-size: .7rem; font-weight: 700; }
+.dot { width: 9px; height: 9px; border-radius: 3px; }
 .dot-ok   { background: var(--ok); }
 .dot-cond { background: var(--cond); }
 .dot-ng   { background: var(--ng); }
@@ -99,303 +86,224 @@ header p {
   padding: 9px 14px 10px;
   border-bottom: 1px solid var(--border);
 }
-.search-wrap {
-  position: relative;
-}
+.search-wrap { position: relative; }
 .search-icon {
   position: absolute; left: 12px; top: 50%;
   transform: translateY(-50%);
-  color: var(--soft); pointer-events: none;
-  font-size: .95rem;
+  color: var(--soft); pointer-events: none; font-size: .95rem;
 }
 input[type="search"] {
-  width: 100%;
-  font-family: inherit; font-size: .88rem;
+  width: 100%; font-family: inherit; font-size: .88rem;
   padding: 9px 14px 9px 34px;
-  border: 2px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--deep);
-  outline: none;
-  -webkit-appearance: none;
+  border: 2px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--deep);
+  outline: none; -webkit-appearance: none;
 }
 input[type="search"]:focus { border-color: var(--mid); }
 
 .filters {
-  display: flex;
-  gap: 5px 6px;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-top: 8px;
+  display: flex; gap: 5px 6px; flex-wrap: wrap;
+  align-items: center; margin-top: 8px;
 }
 .filter-sep {
-  width: 1px;
-  height: 18px;
-  background: var(--border);
-  flex-shrink: 0;
-  margin: 0 1px;
+  width: 1px; height: 18px; background: var(--border);
+  flex-shrink: 0; margin: 0 1px;
 }
 .chip {
   font-family: inherit; font-size: .72rem; font-weight: 700;
-  padding: 4px 11px;
-  border-radius: 999px;
-  border: 2px solid var(--border);
-  background: var(--surface);
-  color: var(--mid);
+  padding: 4px 11px; border-radius: 999px;
+  border: 2px solid var(--border); background: var(--surface); color: var(--mid);
   cursor: pointer;
   transition: background .15s, color .15s, border-color .15s;
   white-space: nowrap;
 }
 .chip.on { background: var(--deep); border-color: var(--deep); color: #fff; }
 .chip:focus-visible { outline: 3px solid var(--mid); outline-offset: 2px; }
-.filter-hint {
-  width: 100%;
-  font-size: .65rem;
-  color: var(--soft);
-  margin-top: 3px;
-}
+.filter-hint { width: 100%; font-size: .65rem; color: var(--soft); margin-top: 3px; }
 
-/* ── MAIN ── */
-main {
-  padding: 10px 10px 60px;
+/* ── LIST MAIN ── */
+.list-main {
   max-width: 640px;
   margin: 0 auto;
-  column-count: 2;
-  column-gap: 8px;
+  padding: 10px 10px 60px;
 }
-.count-bar {
-  column-span: all;
-  font-size: .7rem;
-  color: var(--soft);
-  padding: 2px 2px;
+.count-bar { font-size: .7rem; color: var(--soft); padding: 2px 2px 8px; }
+
+/* ── 2 COLUMN (JS distribution, Safari-safe) ── */
+.card-cols {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.card-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* ── CARD ── */
-details.card {
+/* ── CARD (list) ── */
+.card {
   background: var(--surface);
   border: 2px solid var(--border);
   border-radius: var(--r);
-  overflow: hidden;
-  break-inside: avoid;
-  margin-bottom: 8px;
-}
-details.card.is-open {
-  column-span: all;
-}
-details.card[data-status="ok"]   { border-left: 4px solid var(--ok); }
-details.card[data-status="cond"] { border-left: 4px solid var(--cond); }
-details.card[data-status="ng"]   { border-left: 4px solid var(--ng); }
-
-details.card summary {
-  list-style: none;
+  padding: 10px;
   cursor: pointer;
-  padding: 9px 10px;
+  -webkit-tap-highlight-color: transparent;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  user-select: none;
+  transition: opacity .1s;
 }
-details.card summary::-webkit-details-marker { display: none; }
-details.card summary:focus-visible {
-  outline: 3px solid var(--mid);
-  outline-offset: -3px;
-  border-radius: var(--r);
-}
+.card[data-status="ok"]   { border-left: 4px solid var(--ok); }
+.card[data-status="cond"] { border-left: 4px solid var(--cond); }
+.card[data-status="ng"]   { border-left: 4px solid var(--ng); }
+.card:active { opacity: .65; }
 
 .card-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  width: 100%;
-  gap: 4px;
 }
-
 .emoji {
-  font-size: 1.15rem;
-  width: 30px; height: 30px;
-  display: grid; place-items: center;
-  border-radius: 8px;
-  flex-shrink: 0;
+  font-size: 1.1rem; width: 30px; height: 30px;
+  display: grid; place-items: center; border-radius: 8px; flex-shrink: 0;
 }
 .emoji-ok   { background: var(--ok-bg); }
 .emoji-cond { background: var(--cond-bg); }
 .emoji-ng   { background: var(--ng-bg); }
 
-.food-name {
-  font-family: 'Zen Kaku Gothic New', sans-serif;
-  font-weight: 700;
-  font-size: clamp(.78rem, 3.5vw, .92rem);
-  line-height: 1.3;
-  overflow-wrap: break-word;
-  word-break: keep-all;
-  width: 100%;
-  margin-top: 4px;
-}
-.food-sub {
-  font-size: .6rem;
-  color: var(--soft);
-  line-height: 1.45;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  width: 100%;
-}
-
-.sum-badges {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-  width: 100%;
-}
 .badge-cat {
   font-size: .58rem; font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 999px;
-  color: #fff;
-  white-space: nowrap;
-  flex-shrink: 0;
+  padding: 2px 7px; border-radius: 999px; color: #fff; white-space: nowrap;
 }
 .badge-cat.veg   { background: var(--veg); }
 .badge-cat.fruit { background: var(--fruit); }
 .badge-cat.fish  { background: var(--fish); }
 
+.food-name {
+  font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 700;
+  font-size: clamp(.78rem, 3.5vw, .92rem);
+  line-height: 1.3; overflow-wrap: break-word; word-break: keep-all;
+}
+.food-sub {
+  font-size: .6rem; color: var(--soft); line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card-bottom {
+  display: flex; justify-content: space-between; align-items: center; gap: 4px;
+}
 .badge-period {
   font-size: .58rem; font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--deep);
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  line-height: 1.5;
+  padding: 2px 7px; border-radius: 999px;
+  background: var(--bg); border: 1px solid var(--border); color: var(--deep);
+  word-break: keep-all; overflow-wrap: break-word; line-height: 1.5; flex: 1; min-width: 0;
 }
+.card-arrow { color: var(--soft); flex-shrink: 0; }
 
-.chevron {
-  flex-shrink: 0;
-  color: var(--soft);
-  transition: transform .2s;
-  margin-top: 6px;
+/* ── TIPS ── */
+.tips-inner {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--r); padding: 12px 14px; margin-bottom: 10px;
 }
-details[open] .chevron { transform: rotate(90deg); }
-
-/* ── CARD BODY ── */
-.card-body {
-  padding: 0 12px 12px;
-  border-top: 1px dashed var(--border);
+.tips-title {
+  font-family: 'Zen Kaku Gothic New', sans-serif; font-size: .88rem; font-weight: 700;
+  margin-bottom: 9px; display: flex; align-items: center; gap: 7px;
 }
-
-.info-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--bg);
-  font-size: .82rem;
-}
-.info-row:last-child { border-bottom: none; }
-
-.info-label {
-  font-size: .63rem;
-  font-weight: 700;
-  letter-spacing: .07em;
-  color: var(--soft);
-  white-space: nowrap;
-  padding-top: 2px;
-  min-width: 56px;
-}
-
-.info-val { flex: 1; }
-.info-val ol { padding-left: 18px; display: grid; gap: 3px; }
-.info-val li { line-height: 1.55; }
-
-/* status banners */
-.status-banner {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 11px;
-  border-radius: 8px;
-  font-size: .78rem;
-  font-weight: 700;
-  margin: 10px 0 2px;
-}
-.status-banner.ok   { background: var(--ok-bg);   color: var(--ok);   }
-.status-banner.cond { background: var(--cond-bg); color: var(--cond); }
-.status-banner.ng   { background: var(--ng-bg);   color: var(--ng);   }
-
-.note-box {
-  margin-top: 10px;
-  background: var(--warn-bg);
-  border-radius: 8px;
-  padding: 9px 11px;
-  font-size: .78rem;
-  color: var(--warn);
-  line-height: 1.55;
-}
-.note-box strong {
-  display: block;
-  font-size: .65rem;
-  letter-spacing: .06em;
-  margin-bottom: 2px;
-}
+.tips-list { list-style: none; display: grid; gap: 6px; }
+.tips-list li { font-size: .8rem; padding-left: 20px; position: relative; line-height: 1.55; }
+.tips-list li::before { content: "▸"; position: absolute; left: 0; color: var(--mid); }
 
 /* ── EMPTY ── */
 #empty {
-  display: none;
-  column-span: all;
-  text-align: center;
-  padding: 40px 0;
-  color: var(--soft);
-  font-size: .9rem;
-}
-
-/* ── COMMON TIPS ── */
-.tips {
-  margin: 0 10px 4px;
-  max-width: 640px;
-  margin-left: auto; margin-right: auto;
-}
-.tips-inner {
-  background: var(--surface);
-  border: 2px solid var(--border);
-  border-radius: var(--r);
-  padding: 12px 14px;
-}
-.tips-title {
-  font-family: 'Zen Kaku Gothic New', sans-serif;
-  font-size: .88rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  display: flex; align-items: center; gap: 7px;
-}
-.tips-list {
-  list-style: none;
-  display: grid; gap: 6px;
-}
-.tips-list li {
-  font-size: .8rem;
-  padding-left: 20px;
-  position: relative;
-  line-height: 1.55;
-}
-.tips-list li::before {
-  content: "▸";
-  position: absolute; left: 0;
-  color: var(--mid);
+  display: none; text-align: center;
+  padding: 40px 0; color: var(--soft); font-size: .9rem;
 }
 
 footer {
-  text-align: center;
-  font-size: .66rem;
-  color: var(--soft);
-  padding: 20px 16px 0;
-  max-width: 640px;
-  margin: 0 auto;
+  text-align: center; font-size: .66rem; color: var(--soft);
+  padding: 20px 16px 40px; max-width: 640px; margin: 0 auto;
 }
+
+/* ── DETAIL VIEW (slide-up modal) ── */
+#detail-view {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 100;
+  transform: translateY(100%);
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
+  visibility: hidden;
+}
+#detail-view.open {
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.detail-header {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--deep);
+  padding: 12px 14px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.back-btn {
+  font-family: inherit; font-size: .85rem; font-weight: 700;
+  color: rgba(255,255,255,.85); background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 4px; padding: 6px 2px; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.back-btn:active { opacity: .65; }
+.detail-header-emoji {
+  font-size: 1.3rem; width: 36px; height: 36px;
+  display: grid; place-items: center; border-radius: 10px; flex-shrink: 0;
+}
+.detail-header-text { flex: 1; min-width: 0; }
+.detail-title {
+  font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900;
+  font-size: clamp(.92rem, 4vw, 1.1rem); color: #fff;
+  overflow-wrap: break-word; word-break: keep-all; line-height: 1.25;
+}
+.detail-sub-text { font-size: .68rem; color: rgba(255,255,255,.68); margin-top: 2px; }
+
+.detail-body {
+  padding: 14px 14px 60px;
+  max-width: 640px; margin: 0 auto;
+}
+
+.status-banner {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 8px;
+  font-size: .8rem; font-weight: 700; margin-bottom: 12px;
+}
+.status-banner.ok   { background: var(--ok-bg);   color: var(--ok); }
+.status-banner.cond { background: var(--cond-bg); color: var(--cond); }
+.status-banner.ng   { background: var(--ng-bg);   color: var(--ng); }
+
+.detail-card {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--r); margin-bottom: 10px; overflow: hidden;
+}
+.info-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 11px 14px; border-bottom: 1px solid var(--bg); font-size: .84rem;
+}
+.info-row:last-child { border-bottom: none; }
+.info-label {
+  font-size: .63rem; font-weight: 700; letter-spacing: .07em;
+  color: var(--soft); white-space: nowrap; padding-top: 2px; min-width: 56px;
+}
+.info-val { flex: 1; }
+.info-val ol { padding-left: 18px; display: grid; gap: 4px; }
+.info-val li { line-height: 1.6; }
+
+.note-box {
+  background: var(--warn-bg); border-radius: 8px;
+  padding: 10px 12px; font-size: .79rem; color: var(--warn); line-height: 1.55;
+}
+.note-box strong { display: block; font-size: .66rem; letter-spacing: .06em; margin-bottom: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
@@ -404,6 +312,7 @@ footer {
 </head>
 <body>
 
+<!-- ── LIST VIEW ── -->
 <header>
   <div class="header-grid" aria-hidden="true">
     <span></span><span></span><span></span><span></span><span></span><span></span>
@@ -439,7 +348,7 @@ footer {
   <p class="filter-hint" id="filter-hint"></p>
 </div>
 
-<div class="tips" style="padding-top:12px">
+<div class="list-main">
   <div class="tips-inner">
     <div class="tips-title">🧊 冷凍の共通ルール</div>
     <ul class="tips-list">
@@ -451,15 +360,37 @@ footer {
       <li>解凍・加熱したものの再冷凍はしない。</li>
     </ul>
   </div>
-</div>
 
-<main id="list"></main>
-<p id="empty">該当する食材が見つかりません</p>
+  <p class="count-bar" id="count-bar"></p>
+  <div class="card-cols">
+    <div class="card-col" id="col-l"></div>
+    <div class="card-col" id="col-r"></div>
+  </div>
+  <p id="empty">該当する食材が見つかりません</p>
+</div>
 
 <footer>
   出典：カゴメVEGEDAY・ニチレイフーズ・旭化成・Panasonic・キューピーほか各社の保存情報をもとに作成。<br>
   保存期間はあくまで目安です。においや色・食感がおかしいと感じたら廃棄してください。
 </footer>
+
+<!-- ── DETAIL VIEW (slide-up) ── -->
+<div id="detail-view" role="dialog" aria-modal="true" aria-label="食材詳細">
+  <div class="detail-header">
+    <button class="back-btn" id="back-btn" aria-label="一覧に戻る">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      戻る
+    </button>
+    <span class="detail-header-emoji" id="d-emoji"></span>
+    <div class="detail-header-text">
+      <div class="detail-title" id="d-title"></div>
+      <div class="detail-sub-text" id="d-sub"></div>
+    </div>
+  </div>
+  <div class="detail-body" id="detail-body"></div>
+</div>
 
 <script>
 const FOODS = [
@@ -632,7 +563,6 @@ const FOODS = [
     cook: "凍ったままスープや茹で調理へ。加熱後に裏ごし（薄皮を必ず除く）してペーストに",
     note: "⚠️ 離乳食に使うときは必ず裏ごしして薄皮を取り除くこと（初期は消化しにくい）。"
   },
-
   // ─── 果物 ───
   {
     n: "りんご", e: "🍎", c: "fruit", status: "cond",
@@ -661,7 +591,6 @@ const FOODS = [
     cook: "凍ったまま軽くレンジ加熱してペーストに、または自然解凍（半解凍状態）で果汁を搾って白湯で薄めて与える",
     note: "⚠️ 解凍後は水分が出てやわらかくなるため生食には不向き。離乳食初期は果汁を白湯で薄めて与えること。酸味が強いので与えすぎ注意・下痢のときは控える。"
   },
-
   // ─── 魚 ───
   {
     n: "白身魚（鯛・ヒラメ・カレイ）", e: "🐟", c: "fish", status: "ng",
@@ -689,7 +618,6 @@ const FOODS = [
     cook: "冷蔵庫で半日ほどかけて解凍（または流水解凍）。解凍後は必ず熱湯をかけて塩抜きしてから離乳食に使用",
     note: "❌ 生しらすは鮮度が落ちやすく冷凍保存には向かない。購入するなら釜揚げしらすかしらす干しを選ぶ。冷凍しても離乳食に使うときは必ず塩抜き（熱湯をかける）が必要。"
   },
-
   // ─── 条件付き ───
   {
     n: "じゃがいも", e: "🥔", c: "veg", status: "cond",
@@ -707,127 +635,155 @@ const FOODS = [
   }
 ];
 
-const catName = { veg: "野菜", fruit: "果物", fish: "魚" };
+const catName    = { veg: "野菜", fruit: "果物", fish: "魚" };
 const statusLabel = { ok: "✅ 生カット冷凍OK", cond: "⚠️ 条件付きOK", ng: "❌ 生カット非推奨" };
-
-const list = document.getElementById('list');
-const qEl = document.getElementById('q');
-const emptyEl = document.getElementById('empty');
-const hintEl = document.getElementById('filter-hint');
-
-// 複数選択フィルター
-let selectedCats = new Set();    // veg, fruit, fish
-let selectedStatuses = new Set(); // ok, cond, ng
-
-const CAT_KEYS = ['veg', 'fruit', 'fish'];
+const CAT_KEYS    = ['veg', 'fruit', 'fish'];
 const STATUS_KEYS = ['ok', 'cond', 'ng'];
 
+const qEl        = document.getElementById('q');
+const colL       = document.getElementById('col-l');
+const colR       = document.getElementById('col-r');
+const countBar   = document.getElementById('count-bar');
+const emptyEl    = document.getElementById('empty');
+const hintEl     = document.getElementById('filter-hint');
+const detailView = document.getElementById('detail-view');
+
+let selectedCats     = new Set();
+let selectedStatuses = new Set();
+
+// ── フィルター ──
 function updateChips() {
   const allActive = selectedCats.size === 0 && selectedStatuses.size === 0;
   document.querySelector('.chip-all').classList.toggle('on', allActive);
   document.querySelectorAll('.chip:not(.chip-all)').forEach(b => {
     const f = b.dataset.f;
-    if (CAT_KEYS.includes(f)) {
-      b.classList.toggle('on', selectedCats.has(f));
-    } else if (STATUS_KEYS.includes(f)) {
-      b.classList.toggle('on', selectedStatuses.has(f));
-    }
+    if (CAT_KEYS.includes(f))    b.classList.toggle('on', selectedCats.has(f));
+    if (STATUS_KEYS.includes(f)) b.classList.toggle('on', selectedStatuses.has(f));
   });
-
-  // ヒント表示
   const parts = [];
-  if (selectedCats.size > 0) parts.push([...selectedCats].map(k => catName[k]).join('・'));
+  if (selectedCats.size > 0)     parts.push([...selectedCats].map(k => catName[k]).join('・'));
   if (selectedStatuses.size > 0) {
-    const labels = { ok: 'OK', cond: '要注意', ng: '非推奨' };
-    parts.push([...selectedStatuses].map(k => labels[k]).join('・'));
+    const l = { ok: 'OK', cond: '要注意', ng: '非推奨' };
+    parts.push([...selectedStatuses].map(k => l[k]).join('・'));
   }
-  hintEl.textContent = parts.length > 0 ? `絞り込み中：${parts.join(' ＋ ')}` : '';
+  hintEl.textContent = parts.length ? `絞り込み中：${parts.join(' ＋ ')}` : '';
 }
 
 document.querySelectorAll('.chip').forEach(b => {
   b.addEventListener('click', () => {
     const f = b.dataset.f;
     if (f === 'all') {
-      selectedCats.clear();
-      selectedStatuses.clear();
+      selectedCats.clear(); selectedStatuses.clear();
     } else if (CAT_KEYS.includes(f)) {
-      if (selectedCats.has(f)) selectedCats.delete(f);
-      else selectedCats.add(f);
+      selectedCats.has(f) ? selectedCats.delete(f) : selectedCats.add(f);
     } else if (STATUS_KEYS.includes(f)) {
-      if (selectedStatuses.has(f)) selectedStatuses.delete(f);
-      else selectedStatuses.add(f);
+      selectedStatuses.has(f) ? selectedStatuses.delete(f) : selectedStatuses.add(f);
     }
     updateChips();
     render();
   });
 });
 
+// ── カード生成 ──
+function createCard(f) {
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.dataset.status = f.status;
+  div.innerHTML = `
+    <div class="card-top">
+      <span class="emoji emoji-${f.status}" aria-hidden="true">${f.e}</span>
+      <span class="badge-cat ${f.c}">${catName[f.c]}</span>
+    </div>
+    <span class="food-name">${f.n}</span>
+    <span class="food-sub">${f.sub}</span>
+    <div class="card-bottom">
+      <span class="badge-period">❄ ${f.period}</span>
+      <svg class="card-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>`;
+  div.addEventListener('click', () => openDetail(f));
+  return div;
+}
+
+// ── リスト描画（JS2列振り分け）──
 function render() {
   const kw = qEl.value.trim();
-  list.innerHTML = "";
+  colL.innerHTML = '';
+  colR.innerHTML = '';
   let shown = 0;
 
   FOODS.forEach(f => {
-    const catMatch = selectedCats.size === 0 || selectedCats.has(f.c);
+    const catMatch    = selectedCats.size === 0    || selectedCats.has(f.c);
     const statusMatch = selectedStatuses.size === 0 || selectedStatuses.has(f.status);
     if (!catMatch || !statusMatch) return;
     if (kw && !f.n.includes(kw)) return;
+
+    // 短い列に追加してバランスを保つ
+    const card = createCard(f);
+    if (colL.childElementCount <= colR.childElementCount) {
+      colL.appendChild(card);
+    } else {
+      colR.appendChild(card);
+    }
     shown++;
-
-    const d = document.createElement('details');
-    d.className = "card";
-    d.dataset.status = f.status;
-
-    // 開いたとき2列にまたがる
-    d.addEventListener('toggle', () => {
-      d.classList.toggle('is-open', d.open);
-    });
-
-    const stepItems = f.how.map(s => `<li>${s}</li>`).join("");
-
-    d.innerHTML = `
-      <summary>
-        <div class="card-top">
-          <span class="emoji emoji-${f.status}" aria-hidden="true">${f.e}</span>
-          <svg class="chevron" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <span class="food-name">${f.n}</span>
-        <span class="food-sub">${f.sub}</span>
-        <div class="sum-badges">
-          <span class="badge-cat ${f.c}">${catName[f.c]}</span>
-          <span class="badge-period">❄ ${f.period}</span>
-        </div>
-      </summary>
-      <div class="card-body">
-        <div class="status-banner ${f.status}">${statusLabel[f.status]}</div>
-
-        <div class="info-row">
-          <span class="info-label">カット方法</span>
-          <span class="info-val">${f.cut}</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">冷凍手順</span>
-          <span class="info-val"><ol>${stepItems}</ol></span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">使うとき</span>
-          <span class="info-val">${f.cook}</span>
-        </div>
-        ${f.note ? `<div class="note-box"><strong>ポイント・注意</strong>${f.note}</div>` : ""}
-      </div>
-    `;
-    list.appendChild(d);
   });
 
-  const bar = document.createElement('p');
-  bar.className = "count-bar";
-  bar.textContent = `${shown} / ${FOODS.length} 食材`;
-  list.prepend(bar);
-
-  emptyEl.style.display = shown ? "none" : "block";
+  countBar.textContent = `${shown} / ${FOODS.length} 食材`;
+  emptyEl.style.display = shown ? 'none' : 'block';
 }
+
+// ── 詳細モーダル ──
+function openDetail(f) {
+  document.getElementById('d-emoji').textContent   = f.e;
+  document.getElementById('d-emoji').className     = `detail-header-emoji emoji-${f.status}`;
+  document.getElementById('d-title').textContent   = f.n;
+  document.getElementById('d-sub').textContent     = f.sub;
+
+  const stepItems = f.how.map(s => `<li>${s}</li>`).join('');
+  document.getElementById('detail-body').innerHTML = `
+    <div class="status-banner ${f.status}">${statusLabel[f.status]}</div>
+    <div class="detail-card">
+      <div class="info-row">
+        <span class="info-label">冷凍期間</span>
+        <span class="info-val">${f.period}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">カット方法</span>
+        <span class="info-val">${f.cut}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">冷凍手順</span>
+        <span class="info-val"><ol>${stepItems}</ol></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">使うとき</span>
+        <span class="info-val">${f.cook}</span>
+      </div>
+    </div>
+    ${f.note ? `<div class="note-box"><strong>ポイント・注意</strong>${f.note}</div>` : ''}`;
+
+  detailView.scrollTop = 0;
+  detailView.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+  detailView.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('back-btn').addEventListener('click', closeDetail);
+
+// スワイプで閉じる（上→下スワイプ）
+let touchStartY = 0;
+detailView.addEventListener('touchstart', e => {
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+detailView.addEventListener('touchend', e => {
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (dy > 60 && detailView.scrollTop === 0) closeDetail();
+}, { passive: true });
 
 qEl.addEventListener('input', render);
 
